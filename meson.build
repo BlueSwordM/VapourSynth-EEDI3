@@ -14,8 +14,7 @@ sources = [
   'EEDI3/vectorclass/instrset_detect.cpp'
 ]
 
-vapoursynth_dep = dependency('vapoursynth').partial_dependency(compile_args : true, includes : true)
-
+vapoursynth_dep = [] #dependency('vapoursynth').partial_dependency(compile_args : true, includes : true)
 deps = [vapoursynth_dep]
 
 libs = []
@@ -80,6 +79,6 @@ shared_module('eedi3m', sources,
   dependencies : deps,
   link_with : libs,
   install : true,
-  install_dir : join_paths(vapoursynth_dep.get_pkgconfig_variable('libdir'), 'vapoursynth'),
+  #install_dir : join_paths(vapoursynth_dep.get_pkgconfig_variable('libdir'), 'vapoursynth'),
   gnu_symbol_visibility : 'hidden'
 )
