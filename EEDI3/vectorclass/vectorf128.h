@@ -1078,15 +1078,15 @@ static inline Vec4f approx_recipr(Vec4f const & a) {
 // approximate reciprocal squareroot (Faster than 1.f / sqrt(a). Relative accuracy better than 2^-11)
 static inline Vec4f approx_rsqrt(Vec4f const & a) {
 #if INSTRSET >= 9  // use more accurate version if available. (none of these will raise exceptions on zero)
-#ifdef __AVX512ER__  // AVX512ER: full precision
-    // todo: if future processors have both AVX512ER and AVX521VL: _mm128_rsqrt28_round_ps(a, _MM_FROUND_NO_EXC);
-    return _mm512_castps512_ps128(_mm512_rsqrt28_round_ps(_mm512_castps128_ps512(a), _MM_FROUND_NO_EXC));
-#elif defined __AVX512VL__  // AVX512VL: 14 bit precision
-    return _mm_rsqrt14_ps(a);
-#else  // AVX512F: 14 bit precision
-    return _mm512_castps512_ps128(_mm512_rsqrt14_ps(_mm512_castps128_ps512(a)));
-#endif
-#else  // AVX: 11 bit precision
+//#ifdef __AVX512ER__  // AVX512ER: full precision
+//    // todo: if future processors have both AVX512ER and AVX521VL: _mm128_rsqrt28_round_ps(a, _MM_FROUND_NO_EXC);
+//    return _mm512_castps512_ps128(_mm512_rsqrt28_round_ps(_mm512_castps128_ps512(a), _MM_FROUND_NO_EXC));
+//#elif defined __AVX512VL__  // AVX512VL: 14 bit precision
+//    return _mm_rsqrt14_ps(a);
+//#else  // AVX512F: 14 bit precision
+//    return _mm512_castps512_ps128(_mm512_rsqrt14_ps(_mm512_castps128_ps512(a)));
+//#endif
+//#else  // AVX: 11 bit precision
     return _mm_rsqrt_ps(a);
 #endif
 }
