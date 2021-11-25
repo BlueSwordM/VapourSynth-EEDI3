@@ -833,5 +833,28 @@ VS_EXTERNAL_API(void) VapourSynthPluginInit(VSConfigPlugin configFunc, VSRegiste
                  "list_device:int:opt;"
                  "info:int:opt;",
                  eedi3clCreate, nullptr, plugin);
+#else
+    // if opencl is not available, at least make the common cases work.
+    registerFunc("EEDI3CL",
+                 "clip:clip;"
+                 "field:int;"
+                 "dh:int:opt;"
+                 "planes:int[]:opt;"
+                 "alpha:float:opt;"
+                 "beta:float:opt;"
+                 "gamma:float:opt;"
+                 "nrad:int:opt;"
+                 "mdis:int:opt;"
+                 "hp:int:opt;"
+                 "ucubic:int:opt;"
+                 "cost3:int:opt;"
+                 "vcheck:int:opt;"
+                 "vthresh0:float:opt;"
+                 "vthresh1:float:opt;"
+                 "vthresh2:float:opt;"
+                 "sclip:clip:opt;"
+                 "mclip:clip:opt;"
+                 "opt:int:opt;",
+                 eedi3Create, nullptr, plugin);
 #endif
 }
