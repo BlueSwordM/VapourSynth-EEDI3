@@ -784,7 +784,18 @@ void VS_CC eedi3Create(const VSMap * in, VSMap * out, void * userData, VSCore * 
 extern void VS_CC eedi3clCreate(const VSMap * in, VSMap * out, void * userData, VSCore * core, const VSAPI * vsapi);
 #endif
 
+#ifdef _WIN32
+#include <windows.h>
+#endif
+
 VS_EXTERNAL_API(void) VapourSynthPluginInit(VSConfigPlugin configFunc, VSRegisterFunction registerFunc, VSPlugin * plugin) {
+#ifndef HAVE_OPENCL
+#ifdef _WIN32
+    // Co-exist with OpenCL enabled eedi3m.dll.
+    HANDLE h = LoadLibraryW(L"OpenCL.dll");
+    if (h) return;
+#endif
+#endif
     configFunc("com.holywu.eedi3", "eedi3m", "Enhanced Edge Directed Interpolation 3", VAPOURSYNTH_API_VERSION, 1, plugin);
 
     registerFunc("EEDI3",
@@ -809,7 +820,6 @@ VS_EXTERNAL_API(void) VapourSynthPluginInit(VSConfigPlugin configFunc, VSRegiste
                  "opt:int:opt;",
                  eedi3Create, nullptr, plugin);
 
-#ifdef HAVE_OPENCL
     registerFunc("EEDI3CL",
                  "clip:clip;"
                  "field:int;"
@@ -832,29 +842,11 @@ VS_EXTERNAL_API(void) VapourSynthPluginInit(VSConfigPlugin configFunc, VSRegiste
                  "device:int:opt;"
                  "list_device:int:opt;"
                  "info:int:opt;",
-                 eedi3clCreate, nullptr, plugin);
+#ifdef HAVE_OPENCL
+                 eedi3clCreate,
 #else
-    // if opencl is not available, at least make the common cases work.
-    registerFunc("EEDI3CL",
-                 "clip:clip;"
-                 "field:int;"
-                 "dh:int:opt;"
-                 "planes:int[]:opt;"
-                 "alpha:float:opt;"
-                 "beta:float:opt;"
-                 "gamma:float:opt;"
-                 "nrad:int:opt;"
-                 "mdis:int:opt;"
-                 "hp:int:opt;"
-                 "ucubic:int:opt;"
-                 "cost3:int:opt;"
-                 "vcheck:int:opt;"
-                 "vthresh0:float:opt;"
-                 "vthresh1:float:opt;"
-                 "vthresh2:float:opt;"
-                 "sclip:clip:opt;"
-                 "mclip:clip:opt;"
-                 "opt:int:opt;",
-                 eedi3Create, nullptr, plugin);
+                 // if opencl is not available, at least make the common cases work.
+                 eedi3Create,
 #endif
+                 nullptr, plugin);
 }
