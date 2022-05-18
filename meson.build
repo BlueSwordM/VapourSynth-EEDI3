@@ -20,7 +20,7 @@ deps = [vapoursynth_dep]
 libs = []
 
 if host_machine.cpu_family().startswith('x86')
-  add_project_arguments('-DVS_TARGET_CPU_X86', '-mfpmath=sse', '-msse2', language : 'cpp')
+  add_project_arguments('-DVS_TARGET_CPU_X86', '-march=native', language : 'cpp')
 
   sources += [
     'EEDI3/EEDI3_SSE2.cpp',
