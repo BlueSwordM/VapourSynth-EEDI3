@@ -8,8 +8,8 @@
 #include <thread>
 #include <unordered_map>
 
-#include <VapourSynth.h>
-#include <VSHelper.h>
+#include "/usr/local/include/vapoursynth/VapourSynth.h"
+#include "/usr/local/include/vapoursynth/VSHelper.h"
 
 template<typename T>
 static void copyPad(const VSFrameRef * src, VSFrameRef * dst, const int plane, const int off, const bool dh, const VSAPI * vsapi) noexcept {
